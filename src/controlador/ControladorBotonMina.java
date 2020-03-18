@@ -14,8 +14,10 @@ public class ControladorBotonMina implements ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		System.out.println("hola " + btn.getPosx() + " y: "+ btn.getPosy());
-		
+		System.out.println("hola " + btn.getPosx() + " y: "+ btn.getPosy() + btn.isMina());
+		if(btn.isMina()) {
+			btn.setEnabled(false);
+		}
 	}
 
 }

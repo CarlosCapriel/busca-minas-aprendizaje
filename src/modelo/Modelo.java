@@ -24,8 +24,4 @@ public class Modelo {
 		this.ancho = ancho;
 	}
 	
-//	metodo que devuelve true/false si el numero generado es > 50, esto para establecer las minas aleatoriamente
-	public boolean establecerMina() {
-		return Math.random()*100+1 > 50;
-	}
 }
