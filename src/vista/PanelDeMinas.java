@@ -13,7 +13,7 @@ public class PanelDeMinas extends JPanel{
 	
 	private int largo;
 	private int ancho;
-	public ArrayList<JButton> btnMinas = new ArrayList<JButton>();
+	public ArrayList<JButton> btnMinas;
 	
 	public PanelDeMinas(int largo, int ancho) {
 		setLayout(new GridLayout(largo, ancho));
@@ -22,9 +22,13 @@ public class PanelDeMinas extends JPanel{
 		agregarBotones();
 	}
 	public void agregarBotones() {
-		for (int i = 0; i < largo; ++i) {
-			for (int j = 0; j < ancho; ++j) {
-				add(new BotonMina((short)i, (short)j, true));
+		btnMinas = new ArrayList<JButton>();
+		int pivote = 0;
+		for (int i = 1; i <= largo; ++i) {
+			for (int j = 1; j <= ancho; ++j) {
+				btnMinas.add(new BotonMina((short)j, (short)i, true));
+				add(btnMinas.get(pivote));
+				++pivote;
 			}
 		}
 	}

@@ -25,7 +25,7 @@ public class Demo extends JFrame{
 	public void crearVentana() {
 		pnlCenter = new JPanel();
 		pnlCenter.setLayout(new BorderLayout());
-		setSize(260, 70);
+		setSize(260, 260);
 		setTitle("Busca minas.");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
