@@ -17,11 +17,13 @@ public class ControladorBotonMina implements ActionListener{
 	private int posx;
 	private int posy;
 	private int indexArray;
+	private int contadorMinas;
 	public ControladorBotonMina(BotonMina btn) {
 		this.btn = btn;
 	}
 	public ControladorBotonMina() {
 		// TODO Auto-generated constructor stub
+		contadorMinas = 0;
 		numMaxColumns = 0;
 		numMaxFilas = 0;
 		posx = 0;
@@ -42,6 +44,7 @@ public class ControladorBotonMina implements ActionListener{
 				posy = btn.getPosy();
 				posx = btn.getPosx();
 				indexArray = numMaxColumns*(posy-1) + (posx-1);///Encontramos el indice en que se encuentra el boton en el ArrayList
+				arrayBtnMina.get(indexArray).setText(contarMinas()+"");
 				arrayBtnMina.get(indexArray).setEnabled(false);
 			}
 	}
@@ -54,27 +57,84 @@ public class ControladorBotonMina implements ActionListener{
 	public void setNumMaxColumns(int numMaxColumns) {
 		this.numMaxColumns = numMaxColumns;
 	}
-	public void contarMinas() {
+	public int contarMinas() {
+//		Todos las posiciones posibles de los btns (ezquinas infer izquier, arriba, super izquierda, debajo etc.
+//		estan en el ultimo else que es el caso cuando se tiene que evaluar en los alrededores de ese btn los ocho btn circundantes
+//		el caso mas claro es cuando el boton esta en el centro.
 		if (posx == 1 && posy == 1) {///Caso que estes en la esquina superior izquierda
 			
+			contadorMinas = 0;
+			System.out.println("in "+indexArray + "maxC " + numMaxColumns);
+			contadorMinas += (arrayBtnMina.get(indexArray+1).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(numMaxColumns).isMinado()) ? 1 : 0;///El indice del array comienza en 0 + numMaxCols
+			contadorMinas += (arrayBtnMina.get(numMaxColumns+1).isMinado()) ? 1 : 0;///Llevaria al btn de 2da fila 1era columna, +1 
+																					///sera el siguiente
 		} else if ((posx == 1) && (posy == numMaxFilas)) {///Caso para cuando este en la esquina inferior izquierda
 			
-		} else if ((posx == numMaxColumns) && (posy == 1)) {///Caso para cuando este en la esquina superior derecha
+			contadorMinas = 0;
+			contadorMinas += (arrayBtnMina.get(indexArray+1).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray-numMaxColumns).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray-(numMaxColumns-1)).isMinado()) ? 1 : 0;
+		
+		} else if ((posx == numMaxColumns) && (posy == 1)) {///Caso para cuando estes en la esquina superior derecha
 			
+			contadorMinas = 0;
+			contadorMinas += (arrayBtnMina.get(indexArray-1).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray+numMaxColumns).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray+(numMaxColumns-1)).isMinado()) ? 1 : 0;
+		
 		} else if ((posx == numMaxColumns) && (posy == numMaxFilas)) {///Caso para cuando este en la esquina inferior derecha
-			
+		
+			contadorMinas = 0;
+			contadorMinas += (arrayBtnMina.get(indexArray-1).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray-numMaxColumns).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray-(numMaxColumns+1)).isMinado()) ? 1 : 0;
+		
 		} else if (posx == 1) {///Caso para cuando este en la primera columna, sin importar fila y no es una esquina,
-								///  se esta segura por esos casos se evaluaron en los anteriores filtros.
-			
+								///  se esta seguro por esos casos se evaluaron en los anteriores filtros.
+			contadorMinas = 0;
+			contadorMinas += (arrayBtnMina.get(indexArray+1).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray+numMaxColumns).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray+(numMaxColumns+1)).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray-numMaxColumns).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray-(numMaxColumns-1)).isMinado()) ? 1 : 0;
+		
 		} else if (posy == 1) {///Caso para cuando se este en la primera fila sin importar columna y no es esquina
+			
+			contadorMinas = 0;
+			contadorMinas += (arrayBtnMina.get(indexArray-1).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray+1).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray+(numMaxColumns-1)).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray+numMaxColumns).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray+numMaxColumns+1).isMinado()) ? 1 : 0;
 			
 		} else if (posx == numMaxColumns) {///Caso para cuando se este en la ultima columna sin importar fila y no es esquina.
 			
+			contadorMinas = 0;
+			contadorMinas += (arrayBtnMina.get(indexArray-1).isMinado()) ? 1 : 0;///El que esta a la izquierda
+			contadorMinas += (arrayBtnMina.get(indexArray-(numMaxColumns+1)).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray-numMaxColumns).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray+(numMaxColumns-1)).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray+numMaxColumns).isMinado()) ? 1 : 0;
+			
 		} else if(posy == numMaxFilas) {///Caso para cuando se este en la ultima fila y sin importar columna y no es esquina.
-			
+			contadorMinas = 0;
+			contadorMinas += (arrayBtnMina.get(indexArray-1).isMinado()) ? 1 : 0;///El que esta a la izquierda
+			contadorMinas += (arrayBtnMina.get(indexArray+1).isMinado()) ? 1 : 0;///El que esta a la derecha
+			contadorMinas += (arrayBtnMina.get(indexArray-(numMaxColumns+1)).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray-numMaxColumns).isMinado()) ? 1 : 0;
+			contadorMinas += (arrayBtnMina.get(indexArray-(numMaxColumns-1)).isMinado()) ? 1 : 0;
 		} else {///El ultimo caso para cuando no sea ninguno de los anteriores es decir se tenga que evaluar los 8 cuadros alrededor de este.
-			
+			contadorMinas = 0;
+			contadorMinas += (arrayBtnMina.get(indexArray-1).isMinado()) ? 1 : 0;///El que esta a la izquierda
+			contadorMinas += (arrayBtnMina.get(indexArray+1).isMinado()) ? 1 : 0;///El que esta a la derecha
+			contadorMinas += (arrayBtnMina.get(indexArray-(numMaxColumns+1)).isMinado()) ? 1 : 0; ///El que esta en la  esquina supr izquier
+			contadorMinas += (arrayBtnMina.get(indexArray-numMaxColumns).isMinado()) ? 1 : 0;///El que esta arriba
+			contadorMinas += (arrayBtnMina.get(indexArray-(numMaxColumns-1)).isMinado()) ? 1 : 0;///El que esta en la  esquina supr derecha
+			contadorMinas += (arrayBtnMina.get(indexArray+(numMaxColumns-1)).isMinado()) ? 1 : 0;///El que esta en la  esquina infer izquier
+			contadorMinas += (arrayBtnMina.get(indexArray+numMaxColumns).isMinado()) ? 1 : 0; ///El que esta debajo
+			contadorMinas += (arrayBtnMina.get(indexArray+(numMaxColumns+1)).isMinado()) ? 1 : 0;///El que esta en la  esquina infer derecha
 		}
-		
+		return contadorMinas;
 	}
 }
