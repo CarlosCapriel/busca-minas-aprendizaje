@@ -8,7 +8,11 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 
 import vista.BotonMina;
-
+/*
+ * @Author: Carlos Capriel
+ * @info:  se implementa un unico listener para todos los botones, aqui mismo se cuentan las minas que un boton tiene a su alrededor.
+ * 
+ * */
 public class ControladorBotonMina implements ActionListener{
 	private BotonMina btn;
 	private ArrayList<BotonMina> arrayBtnMina;
