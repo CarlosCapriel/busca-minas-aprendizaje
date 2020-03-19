@@ -2,10 +2,10 @@ package vista;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 /*
  * @Author: Carlos Capriel
- * @info: Clase contendra todos los botoenes del juego, solo botones que posiblemente, tengan minas,
+ * @info: Clase contendra todos los botoenes del juego, solo botones que posiblemente, tengan minas, la instancia
+ * 	de la clase ControladorBoton es un mismo listener para todos los botones.
  * */
 import javax.swing.JPanel;
 
@@ -16,11 +16,13 @@ public class PanelDeMinas extends JPanel{
 	private int largo;
 	private int ancho;
 	public ArrayList<BotonMina> btnMinas;
+	private ControladorBotonMina btnControla;
 	
 	public PanelDeMinas(int largo, int ancho) {
 		setLayout(new GridLayout(largo, ancho));
 		this.largo = largo;
 		this.ancho = ancho;
+		btnControla = new ControladorBotonMina();
 		agregarBotones();
 	}
 	public void agregarBotones() {
@@ -30,11 +32,11 @@ public class PanelDeMinas extends JPanel{
 			for (int j = 1; j <= ancho; ++j) {
 				btnMinas.add(new BotonMina((short)j, (short)i, establecerMina()));
 				add(btnMinas.get(pivote));
+				btnMinas.get(pivote).addActionListener(btnControla);
 				++pivote;
 			}
 		}
-		
-//		listenerBtnMina.setBotones(btnMinas);
+		btnControla.setArrayBtnMina(btnMinas);
 	}
 //	metodo que devuelve true/false si el numero generado es > 50, esto para establecer las minas aleatoriamente
 	public boolean establecerMina() {
