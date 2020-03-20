@@ -5,9 +5,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 import vista.BotonMina;
+import vista.PanelDeMinas;
 /*
  * @Author: Carlos Capriel
  * @info:  se implementa un unico listener para todos los botones, aqui mismo se cuentan las minas que un boton tiene a su alrededor.
@@ -44,12 +47,23 @@ public class ControladorBotonMina implements ActionListener{
 						arrayBtnMina.get(i).setBackground(Color.RED);///A los minados les cambiamos tambien el color
 					}
 				}
+//				JOptionPane.showMessageDialog(null, "Perdedor!!!!", "Perdedor!!!", JOptionPane.OK_OPTION);
 			} else {
 				posy = btn.getPosy();
 				posx = btn.getPosx();
 				indexArray = numMaxColumns*(posy-1) + (posx-1);///Encontramos el indice en que se encuentra el boton en el ArrayList
 				arrayBtnMina.get(indexArray).setText(contarMinas()+"");
 				arrayBtnMina.get(indexArray).setEnabled(false);
+				PanelDeMinas.contadorNoMinas--;///Disminuimos ya que se encontro un btn no minado
+			}
+			if(PanelDeMinas.contadorNoMinas == 0) {
+				for (int i = 0; i < arrayBtnMina.size(); ++i) {
+					arrayBtnMina.get(i).setEnabled(false);
+					if (arrayBtnMina.get(i).isMinado()) {
+						arrayBtnMina.get(i).setBorder(BorderFactory.createLineBorder(Color.RED, 1));
+					}
+				}
+				JOptionPane.showMessageDialog(null, "Felicidades has ganado !!!!", "Felicitaciones !!!", JOptionPane.PLAIN_MESSAGE);
 			}
 	}
 	public void setArrayBtnMina(ArrayList<BotonMina> arrayBtnMina) {

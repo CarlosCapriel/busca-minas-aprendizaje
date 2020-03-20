@@ -19,7 +19,7 @@ public class BotonMina extends JButton{
 		this.posx = posx;
 		this.posy = posy;
 		this.minado = minado;
-		this.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+		this.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 	}
 
 	public boolean isMinado() {
