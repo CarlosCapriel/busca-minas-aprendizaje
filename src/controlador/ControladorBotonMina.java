@@ -25,12 +25,14 @@ public class ControladorBotonMina implements ActionListener{
 	private int posy;
 	private int indexArray;
 	private int contadorMinas;
+	private static int contadorNoMinas;
 	public ControladorBotonMina(BotonMina btn) {
 		this.btn = btn;
 	}
 	public ControladorBotonMina() {
 		// TODO Auto-generated constructor stub
-		contadorMinas = 0;
+		contadorNoMinas = 0;///Tendra el conteo de los btn's que no tendran mina
+		contadorMinas = 0; ///Contendra el conteo de los btn's minados alrededor(por cada btn)
 		numMaxColumns = 0;
 		numMaxFilas = 0;
 		posx = 0;
@@ -40,6 +42,22 @@ public class ControladorBotonMina implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 			btn = (BotonMina) e.getSource();
 			System.out.println("hola " + btn.getPosx() + " y: "+ btn.getPosy() + btn.isMinado());
+			
+			if (PanelDeMinas.esPrimera) {///Checka si es la 1era. vez que tocan un btn para establecerles minas
+				contadorNoMinas = 0;
+				posy = btn.getPosy();
+				posx = btn.getPosx();
+				indexArray = numMaxColumns*(posy-1) + (posx-1);///Encontramos el indice en que se encuentra el boton en el ArrayList
+				for (int i = 0; i < arrayBtnMina.size(); ++i) {
+					if ( i != indexArray) {
+						arrayBtnMina.get(i).setMinado(establecerMina());
+						contadorNoMinas += (arrayBtnMina.get(i).isMinado() == false) ? 1 : 0;
+					}
+				}
+				contadorNoMinas += 1;/// el btn que fue presionado es false
+				indexArray = 0;
+				PanelDeMinas.esPrimera = false;
+			} 						
 			if (btn.isMinado()) {
 				for (int i = 0; i < arrayBtnMina.size(); ++i) {/// Si el boton esta minado recorremos todo el array que contiene las instancias
 					arrayBtnMina.get(i).setEnabled(false);///para que no se pueda precionar asi el juego practicamente esta terminado.
@@ -47,16 +65,15 @@ public class ControladorBotonMina implements ActionListener{
 						arrayBtnMina.get(i).setBackground(Color.RED);///A los minados les cambiamos tambien el color
 					}
 				}
-//				JOptionPane.showMessageDialog(null, "Perdedor!!!!", "Perdedor!!!", JOptionPane.OK_OPTION);
 			} else {
 				posy = btn.getPosy();
 				posx = btn.getPosx();
 				indexArray = numMaxColumns*(posy-1) + (posx-1);///Encontramos el indice en que se encuentra el boton en el ArrayList
 				arrayBtnMina.get(indexArray).setText(contarMinas()+"");
 				arrayBtnMina.get(indexArray).setEnabled(false);
-				PanelDeMinas.contadorNoMinas--;///Disminuimos ya que se encontro un btn no minado
+				contadorNoMinas--;///ir disminuyendo hasta llegar a 0
 			}
-			if(PanelDeMinas.contadorNoMinas == 0) {
+			if (contadorNoMinas == 0) {///cuando sea == 0, se pensara que ya gano.
 				for (int i = 0; i < arrayBtnMina.size(); ++i) {
 					arrayBtnMina.get(i).setEnabled(false);
 					if (arrayBtnMina.get(i).isMinado()) {
@@ -64,7 +81,8 @@ public class ControladorBotonMina implements ActionListener{
 					}
 				}
 				JOptionPane.showMessageDialog(null, "Felicidades has ganado !!!!", "Felicitaciones !!!", JOptionPane.PLAIN_MESSAGE);
-			}
+			}	
+			
 	}
 	public void setArrayBtnMina(ArrayList<BotonMina> arrayBtnMina) {
 		this.arrayBtnMina = arrayBtnMina;
@@ -154,5 +172,9 @@ public class ControladorBotonMina implements ActionListener{
 			contadorMinas += (arrayBtnMina.get(indexArray+(numMaxColumns+1)).isMinado()) ? 1 : 0;///El que esta en la  esquina infer derecha
 		}
 		return contadorMinas;
+	}
+//	metodo que devuelve true/false si el numero generado es > 50, esto para establecer las minas aleatoriamente
+	public boolean establecerMina() {
+		return Math.random()*100+1 > 50;
 	}
 }
